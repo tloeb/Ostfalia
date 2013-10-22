@@ -9,7 +9,7 @@ public class BitCount {
 		this.anyint = i;
 	}
 
-	public String getBits() {
+	public String getDual() {
 
 		// Herausfinden wie viele Stellen benötigt werden
 		int count = 1;
@@ -35,21 +35,39 @@ public class BitCount {
 								// von 0-3 geht
 			} else
 				dual += '0';
-		
+
 		}
 
 		return dual;
 	}
-	
-	public int toInt(String s){
-		int out = 00;
-		
-		
-		
+
+	public String revert(String s) {
+		String out = "";
+
+		for (int i = s.length(); i > 0; i--) {
+			char x = s.charAt(i - 1);
+			if (x == '0')
+				out += '1';
+			else
+				out += '0';
+		}
+
 		return out;
-		
+
 	}
 
+	public int getDez(String s) {
+		int out = 0;
+
+		for (int i = 1; i <= s.length(); i++) {
+			char x = s.charAt(s.length()-i);
+			
+			if(x == '1')
+				out += Math.pow(2, i-1);			
+		}
+
+		return out;
+	}
 
 	public int getBitanzahl() {
 		return this.bitanzahl;
