@@ -1,0 +1,14 @@
+Erstellen Sie eine Klasse GdP3A im Paket de.ostfalia.gdp.ws13 im Projekt GdPWS13A3.
+In dieser Klasse soll eine Zahl eingelesen werden und dann berechnet werden, wie viele Bits
+dieser Zahl 1 sind. verwenden Sie dazu eine for-, do- oder while-Schleife. Geben Sie die Zahl im
+Dualsystem und dann die Anzahl von Bits aus. Erzeugen Sie eine neue Zahl, die aus der alten
+mit "seltsam gespiegelten Bits" besteht. Seltsam gespiegelt bedeutet, dass die Bits in
+umgekehrter Reihenfolge stehen, und gleichzeitig 1 durch 0 und 0 durch 1 ersetzt ist. Geben Sie
+die seltsam gespiegelte Zahl binär und dezimal aus.
+Beispiel: Eingabe 12345
+Ausgabe:
+00000000000000000011000000111001
+Eins-Bits: 6
+01100011111100111111111111111111
+1676935167
+ 
