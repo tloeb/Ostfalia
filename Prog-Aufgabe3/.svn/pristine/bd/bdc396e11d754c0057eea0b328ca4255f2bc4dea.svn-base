@@ -1,0 +1,223 @@
+package de.proglabor.aufgabe3;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.TreeMap;
+
+public class SimCollections implements SimCollectionsInterface
+{
+	//bit-masks
+	private static final int TYPE_STEPPE = 0x00;
+	private static final int TYPE_JUNGLE = 0x01;
+	
+	private static final int HEIGHT = 30;
+	private static final int WIDTH = 40;
+	private static final int HEIGHTJUNGLE = 10;
+	private static final int WIDTHJUNGLE = 10;
+	
+	//end coordinates, from 0 to size-1
+	private static final int JUNGLEXSTART = WIDTH / 2 - WIDTHJUNGLE / 2 - 1;
+	private static final int JUNGLEXEND = Math.min((JUNGLEXSTART + WIDTHJUNGLE / 2), WIDTH - 1);
+	
+	private static final int JUNGLEYSTART = HEIGHT / 2 - HEIGHTJUNGLE / 2 - 1;
+	private static final int JUNGLEYEND = Math.min((JUNGLEYSTART + HEIGHTJUNGLE / 2), HEIGHT - 1);
+	
+	
+	private static final int INITIALENERGY = 1000;
+	private static final int REPRODUCTIONENERGY = 200;
+
+	
+	private int[][] feld;
+	private LinkedList<TierInterface> tiere = new LinkedList<TierInterface>();
+	private List<Pflanze> pflanzen = new ArrayList<Pflanze>();
+	
+	public SimCollections()
+	{
+		//creates the steppe and fills jungle in centre
+		feld = new int[WIDTH][HEIGHT];
+		for (int x = 0; x < WIDTH; x++)
+		{
+			for (int y = 0; y < HEIGHT; y++)
+			{
+				//including feld[JUNGLESTART] and feld[JUNGLEEND]
+				if (x >= JUNGLEXSTART && x <= JUNGLEXEND && y >= JUNGLEYSTART && y <= JUNGLEYEND)
+				{
+					feld[x][y] = TYPE_JUNGLE;
+				}
+				else
+				{
+					feld[x][y] = TYPE_STEPPE;
+				}
+			}
+		}
+		
+		Tier erstes = new Tier();
+		erstes.randomGenes();
+		erstes.setPosition(WIDTH / 2, HEIGHT / 2);
+		erstes.eat(INITIALENERGY);
+		tiere.add(erstes);
+	}
+	
+	public void spawnPlants()
+	{
+		//now spawn new plants in jungle
+		int plantSpawnX;
+		int plantSpawnY;
+		Random randPlantSpawn = new Random();
+		do
+		{
+			plantSpawnX = randPlantSpawn.nextInt(WIDTH);
+			plantSpawnY = randPlantSpawn.nextInt(HEIGHT);
+		} while(feld[plantSpawnX][plantSpawnY] != TYPE_JUNGLE);
+		pflanzen.add(new Pflanze(plantSpawnX, plantSpawnY));
+		
+		//now somewhere in steppe
+		plantSpawnX = randPlantSpawn.nextInt(WIDTH);
+		plantSpawnY = randPlantSpawn.nextInt(HEIGHT);
+		pflanzen.add(new Pflanze(plantSpawnX, plantSpawnY));
+		
+	
+	}
+	
+	public void day()
+	{
+		Random rand = new Random();
+		day(rand.nextInt(), rand.nextInt(), rand.nextInt());
+	}
+	
+	public void day(int randomDirection, int randomReproduceGene, int randomReproduceMutation)
+	{
+		List<TierInterface> toteTiere = new LinkedList<TierInterface>();		
+		//wird hier geholt, damit neue tiere erst am nächsten tag was machen
+		int anzahlTiere = tiere.size();
+		for (int i = 0; i < anzahlTiere; i++)
+		{
+			TierInterface aktuellesTier = tiere.get(i);			
+			//turn
+			aktuellesTier.turn(randomDirection);			
+			//move
+			aktuellesTier.move(HEIGHT, WIDTH);
+			
+			//eat
+			for (int c = 0; c < pflanzen.size(); c++)
+			{
+				Pflanze aktuellePflanze = pflanzen.get(c);
+				if (aktuellePflanze.getX() == aktuellesTier.getX() && aktuellePflanze.getY() == aktuellesTier.getY())
+				{
+					aktuellesTier.eat(aktuellePflanze.getEnergy());
+					pflanzen.remove(aktuellePflanze);
+					break;
+				}
+			}
+			aktuellesTier.eat(-1);
+			
+			//if this animal is dead we add it to the list of dead animals, we can't remove right here because of tiere.size()
+			if (aktuellesTier.getEnergy() <= 0)
+			{
+				toteTiere.add(aktuellesTier);
+			}
+			
+			//reproduce
+			if (aktuellesTier.getEnergy() >= REPRODUCTIONENERGY)
+			{
+				TierInterface nachwuchs = aktuellesTier.reproduce(randomReproduceGene, randomReproduceMutation);
+				tiere.add(nachwuchs);
+			}
+		}
+		
+		//now remove them
+		for (int i = 0; i < toteTiere.size(); i++)
+		{
+			tiere.remove(toteTiere.get(i));
+		}
+		
+		spawnPlants();
+	}
+	
+	public int getAnzahlTiere(int x, int y)
+	{
+		int anzahl = 0;
+		for (int i = 0; i < tiere.size(); i++)
+		{
+			TierInterface aktuellesTier = tiere.get(i);
+			if (aktuellesTier.getX() == x && aktuellesTier.getY() == y)
+			{
+				anzahl++;
+			}
+		}
+		return anzahl;
+	}
+	
+	public int getAnzahlTiereAll()
+	{
+		return tiere.size();
+	}
+	
+	public int getAnzahlPflanzen(int x, int y)
+	{
+		int anzahl = 0;
+		for (int c = 0; c < pflanzen.size(); c++)
+		{
+			PflanzeInterface aktuellePflanze = pflanzen.get(c);
+			if (aktuellePflanze.getX() == x && aktuellePflanze.getY() == y)
+			{
+				anzahl++;
+			}
+		}
+		return anzahl;
+	}
+	
+	public int getAnzahlPflanzenAll()
+	{
+		return pflanzen.size();
+	}
+	
+	public LinkedList<TierInterface> getTiere()
+	{
+//		Arraylist--> LinkedList
+//		LinkedList<Tier> newTier = new LinkedList<Tier>();
+//		int anzahlTiere = tiere.size();
+//		for (int i = 0; i < anzahlTiere; i++)
+//		{
+//			Tier aktuellesTier = tiere.get(i);	
+//			newTier.add(aktuellesTier);
+//		}
+		
+		return this.tiere;
+	}
+	
+	public TreeMap<Pflanze, Integer> getPflanzen()
+	{
+		TreeMap<Pflanze, Integer> newPflanze = new TreeMap<Pflanze, Integer>();
+		for (int x = 0; x <= feld.length; x++) {
+			for ( int y = 0; y <= feld[0].length; y++) {
+				
+				if(getAnzahlPflanzen(x, y) > 0) {
+					Pflanze pflanzencontainer = new Pflanze(x, y);
+					newPflanze.put(pflanzencontainer, getAnzahlPflanzen(x, y));					
+				}
+				
+			}
+		}
+		return newPflanze;
+	}
+	
+	public void setTier(Tier neuesTier)
+	{
+		tiere.add(neuesTier);
+	}
+	
+	public String toString()
+	{
+		String ret = "";
+		for (int i = 0; i < tiere.size(); i++)
+		{
+			TierInterface aktuellesTier = tiere.get(i);
+			ret += aktuellesTier.toString();
+			ret += "\n";
+		}
+		return ret;
+	}
+}

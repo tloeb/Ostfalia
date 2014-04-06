@@ -1,0 +1,64 @@
+package de.ostfalia.algodat.ss14;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Eingabe {
+	
+	private int anzahlZeilen = 0;
+	private Elemente[] array;
+	private String filename = "c:/Daten/Uni/Workspace/AlgoDatSS14A1/Minimal2_C.txt";
+	
+	/**
+	 * Getter-Methode fuer die Anzahl der Zeilen
+	 * @return
+	 */
+	public int getAnzahlZeilen() {
+		return anzahlZeilen;
+	}
+	
+	
+	/**
+	 * Methode um alle Woerter aus einer Datei einzulesen
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public void woerterEinlesen() throws IOException, FileNotFoundException {
+		
+		BufferedReader br = new BufferedReader(new FileReader(filename));
+		String letzteZeile, zeile;
+		int i = 0;
+		
+		while(br.ready()) {
+			br.readLine(); // ganze Zeile ohne Zeilenumbruch
+			anzahlZeilen++;
+		}
+		
+		BufferedReader br2 = new BufferedReader(new FileReader(filename));
+		
+		array = new Elemente[anzahlZeilen];
+		letzteZeile = br2.readLine();
+		array[0] = new Elemente(".", letzteZeile, anzahlZeilen);
+		
+		while(br2.ready()) {
+			
+			zeile = br2.readLine();
+			array[i + 1] = new Elemente(letzteZeile, zeile, anzahlZeilen);
+			letzteZeile = zeile;
+			i++;
+		}
+		
+		br.close();
+		br2.close();
+		
+		for(Elemente e : array)
+		{
+			System.out.println(e.toString());
+		}
+		
+	}
+	
+}
+

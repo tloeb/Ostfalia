@@ -1,0 +1,29 @@
+package de.proglabor.aufgabe3.gui;
+
+import java.awt.*;
+import java.awt.event.MouseMotionListener;
+
+import de.proglabor.aufgabe3.SimCollections;
+
+public class Controler {
+
+
+	private static final int HEIGHT = 30;
+	private static final int WIDTH = 40;
+	
+	SimCollections sim = new SimCollections();
+	
+	
+	public void showPlants(View view) {
+		for (int x = 0; x < view.Felder.length ; x++) {
+			for (int y = 0; y < view.Felder[0].length; y++) {
+				if (sim.getAnzahlPflanzen(x, y) > 0) {
+					view.Felder[x][y].setBackground(Color.green);
+				}
+			}
+		}
+	}
+	
+	
+
+}

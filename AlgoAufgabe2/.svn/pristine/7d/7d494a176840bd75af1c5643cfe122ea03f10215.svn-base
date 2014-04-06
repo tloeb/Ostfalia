@@ -1,0 +1,16 @@
+package de.ostfalia.algo.aufgabe2;
+
+public class A2Main {
+    public static void main(String[] args) {
+	Aufgabe2 a2 = new Aufgabe2();
+	int nn = 12;
+	int k = 10;
+	for (int n = 0; n <= 12; n++) {
+	    System.out.println("n:\t" + n);
+	    System.out.println("bk:\t" + a2.binomialkoeffizient_Fakultaet(n, n));
+	    System.out.println("count:\t" + a2.getZaehler());
+	    System.out.println("\n\n");
+	    System.out.println(nn + " über " + k + " : " + a2.binomialkoeffizient_Iterativ(nn, k));
+	}
+    }
+}

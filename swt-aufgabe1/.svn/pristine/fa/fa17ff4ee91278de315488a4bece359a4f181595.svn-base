@@ -1,0 +1,41 @@
+package de.ostfalia.algodat.ss14;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class ScheinSprache {
+	
+	public Eingabe reader = new Eingabe();
+	
+	public void Start()
+	{
+		try {
+			reader.woerterEinlesen();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String erzeuge(int n)
+	{
+		
+		return "";
+	}
+	
+	public int anzahlMoeglicheNachfolger(String wort)
+	{
+		
+		return 0;
+	}
+	
+	public String zufälligerNachfolger(String wort)
+	{
+		
+		return "";
+	}
+	
+}

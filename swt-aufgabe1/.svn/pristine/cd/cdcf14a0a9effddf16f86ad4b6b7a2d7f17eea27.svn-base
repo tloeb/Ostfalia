@@ -1,0 +1,21 @@
+package de.ostfalia.swt.aufgabe1;
+
+public class MainClass {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Analyzer myAnal = new Analyzer();
+		
+		de.proglabor.aufgabe1.SimArray SimArray = new de.proglabor.aufgabe1.SimArray();
+		de.ostfalia.algodat.ss14.Elemente Elements = new de.ostfalia.algodat.ss14.Elemente("bla", "bla", 1);
+		Object object = new Object();
+		
+		System.out.println(myAnal.getAllPublicMethods("de.ostfalia.algodat.ss14.Elemente").toString());
+		System.out.println(myAnal.getInterfaces(SimArray).toString());
+		System.out.println("SuperClass: " + myAnal.hasSuperclass(object.getClass()));
+		System.out.println("ToString Override: " + myAnal.isToStringOverwritten(Elements.getClass()));
+	}
+
+}

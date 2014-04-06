@@ -1,0 +1,77 @@
+package de.ostfalia.algodat.ss14;
+
+public class Elemente {
+	
+	private String key;
+	private String[] values;
+	private int[] frequency;
+	
+	private int counter = 1;
+	
+	public Elemente(String inKey, String inWord, int maxArraySize)
+	{
+		key = inKey;
+		
+		values = new String[maxArraySize];
+		frequency = new int[maxArraySize];
+		
+		values[0] = inWord;
+		frequency[0] = 1;
+	}
+	
+	public static void checkKey(Elemente[] arrElement)
+	{
+		
+	}
+	
+	public void addNewWord(String word)
+	{
+		values[counter] = word;
+		counter++;
+	}
+	
+	public void increaseWordFrequency(String word)
+	{
+		int c = 0;
+		
+		for(String s : values)
+		{
+			if (s == word)
+			{
+				frequency[c]++;
+				break;
+			}
+			
+			c++;
+		}
+	}
+	
+	//Setter & Getter
+	public String getKey()
+	{
+		return key;
+	}
+	
+	//Setter & Getter
+	public String[] getValues()
+	{
+		return values;
+	}
+	
+	public String toString()
+	{
+		if(key == null)
+			return "";
+		
+		String result = key + " -> ";
+		
+		for(String s : values)
+		{
+			if(s != null)
+				result += s + ", ";
+		}
+		
+		return result;
+	}
+	
+}

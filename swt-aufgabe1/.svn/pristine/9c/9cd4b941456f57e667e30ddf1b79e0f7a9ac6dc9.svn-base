@@ -1,0 +1,59 @@
+package de.ostfalia.swt.aufgabe1;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
+
+/**
+ * Created by Maic and Tobias on 20.03.14.
+ */
+public class Analyzer {
+    public Set<Method> getAllPublicMethods ( String classname ){
+        Class selectedClass = classname.getClass();
+        
+        Set<Method> methods = new HashSet<Method>();
+        Collections.addAll(methods,selectedClass.getMethods());
+        
+        return methods;
+    }
+
+    public List<Class <?>> getInterfaces ( Object object ){
+    	
+    	List<Class<?>> interfaces;
+    	interfaces = Arrays.asList(object.getClass().getInterfaces());
+    	
+        return interfaces;
+    }
+
+    boolean isToStringOverwritten (Class <?> clazz ){
+
+        boolean bool = false;
+        
+        try {
+			Method meth = clazz.getMethod("toString", null);
+			if (meth.getDeclaringClass() == this.getClass()) {
+				bool = true;
+			}				
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                	
+    	return bool;
+    }
+
+    public boolean hasSuperclass (Class <?> clazz ){
+    	
+    	Class superclass = clazz.getSuperclass();
+    	if (superclass == null)
+    		return false;
+    	else
+    		return true;
+    				
+    }
+}

@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 
 public class testingArray {
 
@@ -5,14 +7,18 @@ public class testingArray {
 	
 	public static void main(String[] args) {
 		
-		int [][] test = new int[4][6];
+		int [][] test = new int[5][5];
 		
-		System.out.println(randomNumber(4, 20));
+		for(int k = 1; k <= 3; k++) {
+			for (int j = 1; j <= 3; j++) {
+				int buf = Math.abs(j-k);
+				test[j][k] = (int) Math.pow(2, buf);
+				System.out.println("k: " + k + "; j:" + j + " = " + test[j][k]);
+			}
+		}
+		
 
 	}
 
-	public static int randomNumber (int min, int max) {
-		double i = Math.random()* (max - min) + min;
-		return  (int) i;
-	}
+	
 }

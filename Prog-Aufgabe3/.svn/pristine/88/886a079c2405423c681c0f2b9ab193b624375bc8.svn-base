@@ -1,0 +1,29 @@
+package de.proglabor.aufgabe3;
+
+public class Pflanze implements PflanzeInterface
+{
+	private static final int PLANTENERGY = 80;
+	
+	private int x;
+	private int y;
+	private int energy;
+	public Pflanze(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+		this.energy = PLANTENERGY;
+	}
+	
+	public int getX() 
+	{
+		return x;
+	}
+	public int getY() 
+	{
+		return y;
+	}
+	public int getEnergy() 
+	{
+		return energy;
+	}	
+}

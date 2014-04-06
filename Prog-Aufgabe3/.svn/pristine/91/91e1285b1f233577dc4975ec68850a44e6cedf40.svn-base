@@ -1,0 +1,115 @@
+package de.proglabor.aufgabe3.gui;
+
+import de.proglabor.aufgabe3.SimCollections;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
+
+
+//import de.proglabor.aufgabe3.SimCollections;
+
+/**
+ * Shows a Window with Simulation
+ * Created by Tobias on 10.12.13.
+ */
+
+public class SimView implements ActionListener, Observer{
+
+	private static final int HEIGHT = 30;
+	private static final int WIDTH = 40;
+	
+	private JFrame frame;
+	
+	private JLabel Spielfeld;
+	private JLabel Eingabefeld;
+
+    private JButton btn_start;
+    private JButton btn_reset;
+	
+	private JLabel Felder[][];
+
+    private SimCollections model;
+    private SimControlerInterface controler;
+
+	public SimView(SimCollections model, SimControlerInterface controler) {
+        this.controler = controler;
+        this.model = model;
+        this.model.addObserver(this);
+    }
+
+	public void init(SimCollections model) {
+
+
+		
+		frame = new JFrame("Simulation");
+		
+		
+		frame.setSize(500, 500);
+		frame.setVisible(true);
+		
+		// GUI-Komponenten
+		Spielfeld = new JLabel();
+		Eingabefeld = new JLabel("Control");
+				
+		Spielfeld.setVisible(true);
+		Eingabefeld.setVisible(true);
+		
+		GridLayout LayoutSpielfeld = new GridLayout();
+		FlowLayout LayoutControl = new FlowLayout();
+		LayoutSpielfeld.setColumns(HEIGHT);
+		LayoutSpielfeld.setRows(WIDTH);
+
+		Eingabefeld.setLayout(LayoutControl);
+		Spielfeld.setLayout(LayoutSpielfeld);
+		
+		frame.add(Spielfeld, BorderLayout.CENTER);
+		frame.add(Eingabefeld, BorderLayout.WEST);
+
+        btn_reset = new JButton("Reset");
+        btn_start = new JButton("Start Simulation");
+        JTextField width = new JTextField("Breite");
+        JTextField height = new JTextField("Höhe");
+        width.setText("30");
+        height.setText("40");
+
+        Eingabefeld.add(width);
+        Eingabefeld.add(height);
+        Eingabefeld.add(btn_start);
+        Eingabefeld.add(btn_reset);
+
+        btn_start.addActionListener(this);
+		
+		Felder =  new JLabel[Integer.parseInt(width.getText())][Integer.parseInt(height.getText())];
+		for (int x = 1; x < Felder.length; x++) {
+			for (int y = 1; y < Felder[0].length; y++) {
+				Felder[x][y] = new JLabel();				
+				Felder[x][y].setVisible(true);
+				Felder[x][y].setBorder(BorderFactory.createLoweredBevelBorder());
+				Felder[x][y].setToolTipText("X: "+ x + "Y: " + y);
+				Spielfeld.add(Felder[x][y]);
+			}
+		}
+		
+		// Exit on Close
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+    @Override
+    public void update(Observable obs, Object arg) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+
+        if (event.getSource().equals(btn_start)) {
+            System.out.println("Button Pressed");
+        }
+
+    }
+
+}

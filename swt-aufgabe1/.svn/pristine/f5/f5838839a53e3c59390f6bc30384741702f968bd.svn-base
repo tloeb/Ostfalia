@@ -1,0 +1,29 @@
+package de.ostfalia.swt.aufgabe1;
+
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Created by Maic and Tobias on 20.03.14.
+ */
+public class Analyzer {
+    public Set<Method> getAllPublicMethods ( String classname ){
+        Class selectedClass = classname.getClass();
+    }
+
+    public List<Class <?>> getInterfaces ( Object object ){
+    	okay
+    	kaffe mit milf por favor
+        return foo;
+    }
+
+    boolean isToStringOverwritten (Class <?> clazz ){
+    	Penis
+        return foo;
+    }
+
+    public boolean hasSuperclass (Class <?> clazz ){
+        return foo;
+    }
+}

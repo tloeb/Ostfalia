@@ -1,0 +1,19 @@
+package de.proglabor.aufgabe3.gui;
+
+import de.proglabor.aufgabe3.SimCollections;
+
+/**
+ * Starts the Application
+ * Created by Tobias on 10.12.13.
+ */
+
+
+public class SimMain {
+
+    public static void main(String[] args) {
+
+        SimCollections model = new SimCollections();
+        SimControlerInterface controler = new SimControler(model);
+
+    }
+}

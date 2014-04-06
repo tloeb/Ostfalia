@@ -1,0 +1,17 @@
+package de.ostfalia.swt.aufgabe1;
+
+public class MainClass {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Analyzer myAnal = new Analyzer();
+		
+		de.ostfalia.algodat.ss14.Elemente Elements = new de.ostfalia.algodat.ss14.Elemente("bla", "bla", 1);
+		
+		System.out.println(myAnal.getAllPublicMethods("de.ostfalia.algodat.ss14.Elemente").toString());
+		System.out.println(myAnal.getInterfaces(Elements).toString());
+	}
+
+}

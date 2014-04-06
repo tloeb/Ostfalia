@@ -1,0 +1,208 @@
+package de.proglabor.aufgabe3;
+
+import java.util.Random;
+public class Tier implements TierInterface
+{
+	private int dir;
+	private int[] genes = new int[8];
+	private int energy;
+	private int x;
+	private int y;
+	private int lifetime;
+	
+	private static final int ZEHN = 10;
+	
+	public void mutate(int randomGene, int randomMutation)
+	{
+		switch(Math.abs(randomMutation) % 3)
+		{
+		case 0:
+			genes[Math.abs(randomGene) % genes.length] -= 1;
+			if (genes[Math.abs(randomGene) % genes.length] < 1)
+			{
+				genes[Math.abs(randomGene) % genes.length] = 1;
+			}
+			break;
+		case 1:
+			break;				
+		case 2:
+			genes[Math.abs(randomGene) % genes.length] += 1;
+			break;
+		default:
+				break;
+		}
+	}
+	
+	public void randomGenes()
+	{
+		Random rand = new Random();
+		for (int i = 0; i < genes.length; i++)
+		{
+			genes[i] = rand.nextInt(ZEHN) + 1;
+		}
+	}
+	
+	public Tier()
+	{
+		//that way we can copy genes easily
+		lifetime = 0;
+		
+		energy = 0;
+		dir = 0;		
+	}
+	
+	public Tier(int x, int y, int energy, int dir, int[] genes)
+	{
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
+		this.energy = energy;
+		this.genes = genes;
+	}
+	
+	public int getDir()
+	{
+		return dir;
+	}
+	
+	public int[] getGenes()
+	{
+		return genes;
+	}
+	
+	public void setGenes(int[] genes)
+	{
+		this.genes = genes.clone();
+	}
+	
+	public int getEnergy()
+	{
+		return energy;
+	}
+	
+	public int getLifetime()
+	{
+		return lifetime;
+	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
+	public void turn(int randomDirection)
+	{
+		lifetime++;
+		int genSumme = 0;
+		
+		for (int i = 0; i < genes.length; i++)
+		{
+			genSumme += genes[i];
+		}
+		
+		int choice = Math.abs(randomDirection) % genSumme;
+		
+		int c = 0;
+		for (int i = 0; i < genes.length; i++)
+		{
+			c += genes[i];
+			if (choice < c)
+			{
+				dir = i;
+				break;
+			}
+		}
+	}
+	
+	public void setPosition(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void move(int height, int width)
+	{
+		switch(dir)
+		{
+		case 0:
+			y -= 1;
+			x -= 1;
+			break;
+		case 1:
+			y -= 1;
+			break;
+		case 2:
+			y -= 1;
+			x += 1;
+			break;
+		case 3:
+			x += 1;
+			break;
+		case 4:
+			y += 1;
+			x += 1;
+			break;
+		case 5:
+			y += 1;
+			break;
+		case 6:
+			y += 1;
+			x -= 1;
+			break;
+		case 7:
+			x -= 1;
+			break;
+		default:
+			break;
+		}
+		
+		if (y >= height)
+		{
+			y = y % height;
+		}
+		if (y < 0)
+		{
+			y = height + y;
+		}		
+		if (x >= width)
+		{
+			x = x % width;
+		}
+		if (x < 0)
+		{
+			x = width + x;
+		}		
+	}
+	
+	public void eat(int plantEnergy)
+	{
+		energy += plantEnergy;
+	}
+	
+	public TierInterface reproduce(int randomGene, int randomMutation)
+	{
+		Tier nachwuchs = new Tier();
+		nachwuchs.eat(energy / 2);
+		energy -= (energy / 2);
+		nachwuchs.setPosition(x, y);
+		nachwuchs.setGenes(genes);
+		nachwuchs.mutate(randomGene, randomMutation);
+		return nachwuchs;
+	}
+	
+	public TierInterface reproduce()
+	{
+		Random rand = new Random();
+		return reproduce(rand.nextInt(), rand.nextInt());
+	}
+	
+	public String toString()
+	{
+		return "[" + x + "|" + y + "][" + energy + "][" + lifetime + "]";
+	}
+}

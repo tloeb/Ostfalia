@@ -1,0 +1,5 @@
+package de.ostfalia.swt.aufgabe3;
+
+public class NoSuchProductException {
+
+}

@@ -1,0 +1,92 @@
+package de.proglabor.aufgabe3.gui;
+
+import java.awt.*;
+import javax.swing.*;
+
+//import de.proglabor.aufgabe3.SimCollections;
+//edited with intelliJ
+
+public class View {
+
+	private static final int HEIGHT = 30;
+	private static final int WIDTH = 40;
+	
+	JFrame frame;
+	
+	JLabel Spielfeld;	
+	JLabel Buttonfeld;
+	
+	JLabel Felder[][];
+	JButton[] btns;
+
+	Controler control = new Controler();
+	
+
+	
+	
+	public static final int ANZAHL_BTNS = 3;
+	
+	
+	public static void main(String[] args) {
+		
+		//Frameerzeugung
+		View gui = new View();
+//		SimCollections sim = new SimCollections();
+		
+		
+		gui.init();
+	}
+	
+	public void init() {
+		
+		frame = new JFrame("Simulation");
+		
+		
+		frame.setSize(500, 500);
+		frame.setVisible(true);
+		
+		// GUI-Komponenten
+		Spielfeld = new JLabel();
+		Buttonfeld = new JLabel("Control");	
+				
+		Spielfeld.setVisible(true);
+		Buttonfeld.setVisible(true);
+		
+		GridLayout LayoutSpielfeld = new GridLayout();
+		GridLayout LayoutButton = new GridLayout();
+		LayoutSpielfeld.setColumns(HEIGHT);
+		LayoutSpielfeld.setRows(WIDTH);
+		LayoutButton.minimumLayoutSize(Buttonfeld);
+		
+		Buttonfeld.setLayout(LayoutButton);
+		Spielfeld.setLayout(LayoutSpielfeld);
+		
+		frame.add(Spielfeld, BorderLayout.CENTER);
+		frame.add(Buttonfeld, BorderLayout.NORTH);
+		
+		btns = new JButton[ANZAHL_BTNS];
+		for (int i = 0; i<ANZAHL_BTNS; i++) {
+			btns[i] = new JButton("BTN");
+			Buttonfeld.add(btns[i]);
+		}
+		
+		Felder =  new JLabel[40][30];
+		for (int x = 1; x < Felder.length; x++) {
+			for (int y = 1; y < Felder[0].length; y++) {
+				Felder[x][y] = new JLabel();				
+				Felder[x][y].setVisible(true);
+				Felder[x][y].setBorder(BorderFactory.createLoweredBevelBorder());
+				Felder[x][y].setToolTipText("X: "+ x + "Y: " + y);
+				control.showPlants(this);
+				Spielfeld.add(Felder[x][y]);
+			}
+		}
+		
+		
+		
+		
+		// Exit on Close
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+}

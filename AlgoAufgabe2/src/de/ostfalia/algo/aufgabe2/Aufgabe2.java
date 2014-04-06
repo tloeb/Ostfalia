@@ -1,0 +1,164 @@
+package de.ostfalia.algo.aufgabe2;
+
+
+public class Aufgabe2 implements A2Interface {
+
+	private int zaehler = 0;
+
+	@Override
+	public int binomialkoeffizient_Fakultaet(int n, int k) {
+		// k muss kleiner als n sein, n darf max 12 sein.
+		// Zähler:
+		int fak_n = this.fakultaet(n);
+		// Nenner:
+		int fak_k = this.fakultaet(k);
+		int fak_nk = this.fakultaet(n - k);
+		// Multiplikation im Nenner
+		int nenner = fak_k * fak_nk;
+		// Zähler geteilt durch Nenner
+		int result = fak_n / nenner;
+		this.zaehler = zaehler / 2;
+		return result;
+	}
+
+	@Override
+	public int fakultaet(int n) {
+		// Gültige Werte nur bei n<=12, alles >=13 muss abgefangen werden.
+		int result = 0;
+		if (n == 0) {
+			result = 1;
+		} else if (n == 1) {
+			result = 1;
+			zaehler += 1;
+		} else {
+			result = n * fakultaet(n - 1);
+			zaehler += 1;
+		}
+		return result;
+	}
+
+	@Override
+	public int binomialkoeffizient_Iterativ(int n, int k) {
+
+		// Nenner berechnen bevor k verändert wird
+		int bruchnenner = fakultaet(k);
+		int bruchzaehler = 0;
+
+		if (k >= 1 && k <= n) {
+
+			int buf = n;
+
+			for (int i = n - 1; i >= ((n - k) + 1); i--) {
+				buf *= i;
+			}
+			bruchzaehler = buf;
+		}
+
+		if (k == 0) {
+			return 1;
+		}
+
+		int result = bruchzaehler / bruchnenner;
+
+		return result;
+	}
+
+	@Override
+	public int binomialkoeffizient_Rekursiv(int n, int k) {
+		int result = 0;
+		this.zaehler++;
+		if ( n == 0 || k == 0 || n == k) {
+		    result = 1;
+		} else if (n >= 1 && (1 <= k && k < n)) {
+		    result = binomialkoeffizient_Rekursiv(n-1, k-1) + binomialkoeffizient_Rekursiv(n-1, k);
+		}
+		return result;
+	}
+
+	@Override
+	public int binomialkoeffizient_Iterativ2(int n, int k) {
+		this.zaehler = 0;
+		int[] bzaehler = new int[n];
+		int[] bnenner = new int[k];
+
+		for (int i = k; i > 0; i--) {
+			bnenner[i - 1] = i;
+		}
+
+		// ### Wie bei Methode Iterative() nur ausgabe in ein Array ohne
+		// Multiplikation
+		if (k >= 1 && k <= n) {
+			for (int i = n; i >= ((n - k) + 1); i--) {
+				bzaehler[bzaehler.length - i] = i;
+			}
+
+			// Die 0en zum neutralen Element wandeln um die Multiplikation
+			// später zu erleichtern
+			for (int i = 0; i < bzaehler.length; i++) {
+				if (bzaehler[i] == 0) {
+					bzaehler[i] = 1;
+				}
+			}
+		}
+		kürzen(bzaehler, bnenner);
+
+		// ausmultiplizieren
+		int buf1 = 1;
+		int buf2 = 1;
+
+		for (int i = 0; i < bnenner.length; i++) {
+			buf1 *= bnenner[i];
+			zaehler++;
+		}
+
+		for (int j = 0; j < bzaehler.length; j++) {
+			buf2 *= bzaehler[j];
+
+		}
+		if (k == 0) {
+			buf2 = 1;
+		}
+
+		return buf2 / buf1;
+	}
+
+	@Override
+	public int getZaehler() {
+		int cnt = this.zaehler;
+		this.zaehler = 0;
+		return cnt;
+	}
+
+	public void kürzen(int[] z, int[] n) {
+
+		int ggT = 1;
+		for (int i = 0; i < z.length; i++) {
+			for (int j = 0; j < n.length; j++) {
+
+				ggT = euklid(z[i], n[j]);
+				//ggT nach Euklid
+				if (ggT > 1) {
+				z[i] = z[i] / ggT;
+				n[j] = n[j] / ggT;
+				}
+				
+			}
+		}
+	}
+	
+	public int euklid(int x, int y) {
+		if (x == 0) {
+			return y;
+		}
+		else {
+			while (y != 0)
+			{
+				if (x > y)
+					x = x - y;
+				else
+					y = y - x;
+			}
+		return x;
+		}
+	}
+}

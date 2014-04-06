@@ -1,0 +1,115 @@
+package de.proglabor.aufgabe1;
+
+import java.util.ArrayList;
+import java.util.Random;
+/**
+ * 
+ * Die Klasse, welche die Welt enthält und die Funktionen um die Welt zu steuern
+ * @author Maic Hanse
+ */
+public class SimArray implements SimArrayInterface {
+	private static final int WORLDWIDTH = 40, WORLDHEIGHT = 30, DSCHUNGELWIDTH = 10, DSCHUNGELHEIGHT = 10;
+	private int dschungelX = WORLDWIDTH / 2 - DSCHUNGELWIDTH / 2, dschungelY = WORLDHEIGHT / 2 - DSCHUNGELHEIGHT / 2;
+	private int[][] arrayWelt = new int[WORLDWIDTH][WORLDHEIGHT];
+	private ArrayList<Tier> listTiere = new ArrayList<Tier>();
+	
+	private final int initialEnergy = 1000, plantEnergy = 80;
+	
+	private static final int CONST10 = 10;
+	
+	private Random rnd = new Random();
+	
+	/**
+	 * Default Konstruktor 
+	 * Erstellt ein Tier in der Mitte der Welt und Generiert einen zufälligen Satz Gene
+	 */
+	public SimArray() {
+		int[] newGenes = {rnd.nextInt(CONST10) + 1, rnd.nextInt(CONST10) + 1, rnd.nextInt(CONST10) + 1, 
+				rnd.nextInt(CONST10) + 1, rnd.nextInt(CONST10) + 1, rnd.nextInt(CONST10) + 1, 
+				rnd.nextInt(CONST10) + 1, rnd.nextInt(CONST10) + 1};
+		listTiere.add(new Tier(WORLDWIDTH / 2, WORLDHEIGHT / 2, initialEnergy, 0, newGenes));
+		//showWorld();
+	}
+	
+	/**
+	 * Die Day-Methode kontrolliert den Ablauf der Simulation. Sie ruft in allen
+	 * dazugehörigen Instanzen in der gegebenen Reihenfolge die Methoden auf die für 
+	 * den Ablauf eines Tages nötig sind
+	 * @param randomDirection - Nicht verwendeter Parameter
+	 * @param randomReproduceGene - Nicht verwendeter Parameter
+	 * @param randomReproduceMutation - Nicht verwendeter Parameter
+	 */
+	public void day(int randomDirection, int randomReproduceGene, int randomReproduceMutation)
+	{
+		Tier tmpTier;
+		ArrayList<Tier> tmpNewTierListe = new ArrayList<Tier>();
+		ArrayList<Tier> tmpDeadTierListe = new ArrayList<Tier>();
+		
+		growPlants();
+			
+		for (Tier t: listTiere) {
+			if (t != null) {
+				t.turn(rnd.nextInt());
+				t.move(WORLDHEIGHT, WORLDWIDTH);
+				
+				if (getAnzahlPflanzen(t.getX(), t.getY()) > 0) {
+					t.eat(plantEnergy);
+					arrayWelt[t.getX()][t.getY()]--;
+				}
+				
+				tmpTier = (Tier) t.reproduce(rnd.nextInt(8), rnd.nextInt(3));
+				if (tmpTier != null) {
+					tmpNewTierListe.add(tmpTier);
+				}
+				
+				t.consumeEnergy();
+				if (t.getEnergy() <= 0) {
+					tmpDeadTierListe.add(t);
+				}
+			}
+		}
+		
+		listTiere.addAll(tmpNewTierListe);
+		listTiere.removeAll(tmpDeadTierListe);
+	}
+	
+	/**
+	 * Wird Täglich aufgerufen um 2 Pflanzen zu generieren. Eine in der Mitte
+	 * der Welt und eine irgendwo in der gesamten Map.
+	 */
+	private void growPlants() {
+		arrayWelt[dschungelX + rnd.nextInt(DSCHUNGELWIDTH)][dschungelY + rnd.nextInt(DSCHUNGELHEIGHT)]++;
+		arrayWelt[rnd.nextInt(WORLDWIDTH)][rnd.nextInt(WORLDHEIGHT)]++;
+	}
+	
+	/**
+	 * Gibt die Anzahl der Tiere zurück die an der Stelle in der Welt sind.
+	 * @param x - Die x Koordinate an der gesucht werden soll.
+	 * @param y - Die y Koordinate an der gesucht werden soll.
+	 * @return Int - Anzahl der Tiere die sich an der geforderten Stelle der Welt befinden.
+	 */
+	public int getAnzahlTiere(int x, int y) {
+		int zaehler = 0;
+		
+		for (Tier t: listTiere) {
+			if (t.getX() == x && t.getY() == y) {
+				zaehler++;
+			}
+		}
+		return zaehler;
+	}
+	
+	/**
+	 * Gibt die Anzahl der Pflanzen zurück die an der Stelle in der Welt sind.
+	 * @param x - Die x Koordinate an der gesucht werden soll.
+	 * @param y - Die y Koordinate an der gesucht werden soll.
+	 * @return Int - Anzahl der Tiere die sich an der geforderten Stelle der Welt befinden.
+	 */
+	public int getAnzahlPflanzen(int x, int y) {
+		if (x < WORLDWIDTH && y < WORLDHEIGHT) {
+			return arrayWelt[x][y];
+		} else { 
+			return 0;
+		}
+	}
+}

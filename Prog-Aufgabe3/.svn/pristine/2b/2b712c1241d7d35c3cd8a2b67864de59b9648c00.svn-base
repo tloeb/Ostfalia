@@ -1,0 +1,8 @@
+package de.proglabor.aufgabe3;
+
+public interface PflanzeInterface
+{
+	public int getEnergy();
+	public int getX();
+	public int getY();
+}

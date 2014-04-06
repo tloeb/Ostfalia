@@ -1,0 +1,24 @@
+package de.ostfalia.swt.aufgabe3;
+
+import java.math.BigDecimal;
+
+public interface ProductManager {
+
+	/**
+	 *  Liefert eine neue Product-Instanz mit Beschreibung und Preis zurueck.
+	 *  Product-Ids sind Integer groesser 0.
+	 */
+	Product newProduct(String description, BigDecimal price);
+	/**
+	 * Liefert die Product-Instanz mit Id id zurueck.
+	 * @param id Id der Product-Instanz
+	 * @return Product-Instanz mit Id id
+	 * @throws NoSuchProductException, falls Product nicht existiert
+	 */
+	Product find(Integer id) throws NoSuchProductException;
+	/**
+	 *  Loescht Product-Instanz mit Id id.
+	 */
+	void delete(Integer id);
+
+}

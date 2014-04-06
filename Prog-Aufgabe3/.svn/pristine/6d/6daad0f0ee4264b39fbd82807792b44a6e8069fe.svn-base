@@ -1,0 +1,9 @@
+package de.proglabor.aufgabe3.gui;
+
+/**
+ * Controler Interface
+ * Created by Tobias on 10.12.13.
+ */
+public interface SimControlerInterface {
+
+}

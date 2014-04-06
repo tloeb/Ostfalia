@@ -1,0 +1,246 @@
+package de.proglabor.aufgabe1;
+/**
+ * Die Klasse die die Tiere repräsentiert.
+ * @author Maic Hanse
+ *
+ */
+public class Tier implements TierInterface {
+	private int posX, posY;
+	private int energy, dir;
+	private int[] genes = new int[8];
+	
+	private static final int ENGERIE = 200;
+	
+	/**
+	 * Konstruktor für die Klasse Tier
+	 * @param newX - X Position des Tieres
+	 * @param newY - Y Position des Tieres
+	 * @param newEnergy - Energie die das Tier bei seiner Generierung hat.
+	 * @param newDir -  Die Richtung in die das Tier bei seiner Generierung schaut.
+	 * @param newGenes - Die Gene des neuen Tieres
+	 */
+	public Tier(int newX, int newY, int newEnergy, int newDir, int[] newGenes) {
+		posX = newX;
+		posY = newY;
+		energy = newEnergy;
+		dir = newDir;
+		genes = newGenes;	
+	}
+
+	/**
+	 * Sorgt dafür, dass sich das Tier, abhängig von seinen Genen, in eine zufällige Richtung dreht.
+	 * @param randomDirection - Eine zufällig gewählte Zahl die für die Richtungsbestimmung verwendet wird.
+	 */
+	public void turn(int randomDirection) {
+
+		int summe = 0;
+		boolean bSet = false;
+		
+		for (int i: genes) {
+			summe = summe + i;
+		}
+		if (randomDirection < 0) {
+			randomDirection *= -1;
+		}
+		randomDirection = randomDirection % summe;
+
+		summe = genes[0];
+		
+		if (randomDirection >= 0 && randomDirection < summe) {
+			dir = 0;
+			bSet = true;
+		}
+
+		if (!bSet) {
+			for (int i = 1; i < 8; i++) {
+				if (randomDirection >= summe && randomDirection < summe + genes[i]) {
+					dir = i;
+				}
+				summe = summe + genes[i];
+			}
+		}
+	}
+	
+	/**
+	 * Bewegt das Tier um eine Stelle in die zuvor gewählte Richtung. Falls die
+	 * Grenze der Welt überschritten wird, kommt es automatisch auf der anderen
+	 * Seite wieder raus.
+	 * @param height - Enthält die Höhe der Welt
+	 * @param width - Enthält die Breite der Welt
+	 */
+	public void move(int height, int width) {
+		switch (dir) {
+			case 0:
+					posX--;
+					posY--;
+				break;
+			case 1:
+					posY--;
+				break;
+			case 2:
+					posX++;
+					posY--;
+				break;
+			case 3:
+					posX++;
+				break;
+			case 4:
+					posX++;
+					posY++;
+				break;
+			case 5:
+					posY++;
+				break;
+			case 6:
+					posX--;
+					posY++;
+				break;
+			case 7:
+					posX--;
+				break;
+			default:
+				break;
+		}
+		
+		if (posX < 0) {
+			posX = width - 1;
+		}
+		
+		if (posY < 0) {
+			posY = height - 1;
+		}
+	
+		if (posX >= width) {
+			posX = 0;
+		}
+		
+		if (posY >= height) {
+			posY = 0;
+		}
+	}
+	
+	/**
+	 * Sorgt dafür, dass das Tier täglich 1 Punkt seiner Energie verbraucht.
+	 * Sobald es keine Energie mehr hat, stirbt es.
+	 */
+	public void consumeEnergy() {
+		if (energy >= 0) {
+			energy--;
+		}
+		
+		if (energy <= 0) {
+			System.out.println("Dead!");
+		}
+	}
+	
+	/**
+	 * Wird aufgerufen, wenn das Tiere eine Pflanze konsumiert.
+	 * @param plantEnergy - Die Energie die ein Tier pro Pflanze zu sich nimmt.
+	 */
+	public void eat(int plantEnergy) {
+		energy += plantEnergy;
+	}
+	
+	/**
+	 * Wird aufgerufen falls ein Tier genug Energie übrig hat, um sich zu
+	 * reproduzieren.
+	 * @param randomGene - Steht für die Auswahl eine Genes das verändert werden soll
+	 * @param randomMutation - Steht für die Art und Weise auf die das Gen verändert werden soll
+	 * return TierInterface - Gibt ein neues Tier zurück
+	 */
+	public TierInterface reproduce(int randomGene, int randomMutation) {
+		int newEnergy;
+		int[] newGenes = genes;
+		
+		if (randomGene < 0) {
+			randomGene *= -1;
+		}
+		randomGene = randomGene % 8;
+
+		if (randomMutation < 0) {
+			randomMutation *= -1;
+		}
+		randomMutation = randomGene % 3;
+		
+		if (energy > ENGERIE) {
+			newEnergy = energy / 2;
+			energy = energy - newEnergy;
+			
+			switch (randomMutation) {
+				case 0:
+					newGenes[randomGene]++; 
+					break;
+				case 2:
+					if (newGenes[randomGene] > 1) {
+						newGenes[randomGene]--; 
+					}
+					break;
+			default:
+				break;	
+			}
+			
+			return new Tier(posX, posY, newEnergy, 1, newGenes);
+		}
+		
+		return null;
+	}	
+	
+	/*************Setter und Getter Funktionen**************/
+	/**
+	 * Getter Funktion für die Position Y
+	 * @return X Position des Tieres
+	 */
+	public int getX() {
+		return posX;
+	}
+	
+	/**
+	 * Getter Funktion für die Position Y
+	 * @return Y Position des Tieres
+	 */
+	public int getY() {
+		return posY;
+	}
+	
+	/**
+	 * Getter Methode.
+	 * Gibt die aktuelle Energie des Tieres zurück.
+	 * @return Int - Die aktuelle Energie des Tieres
+	 */
+	public int getEnergy() {
+		return energy;
+	}
+	
+	/**
+	 * Getter Methode.
+	 * Gibt die Richtung zurück, in die das Tier momentan schaut.
+	 * @return Int - Die Richtung, in die das Tier grade schaut.
+	 */
+	public int getDir() {
+		return dir;
+	}
+	
+	/**
+	 * Getter Methode.
+	 * Gibt ein Array zurück, das die Gene des Tieres enthält.
+	 * @return Int[] - Die Gene des Tieres
+	 */
+	public int[] getGenes() {
+		//System.out.println("Genes" + summe);
+		return genes;
+	}
+	
+	/**
+	 * Gibt die Summe der Gene des Tieres zurück
+	 * @return Int - Summer der Gene des Tieres
+	 */
+	public int getGenesSumme() {
+		int summe = 0;
+		for (int g: genes)
+		{
+			summe += g;
+		}
+		//System.out.println("Genes" + summe);
+		return summe;
+	}
+}

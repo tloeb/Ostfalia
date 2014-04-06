@@ -1,0 +1,17 @@
+package de.ostfalia.swt.aufgabe2;
+import java.util.ServiceLoader;
+
+
+public class MainMethod {
+
+	public static void main(String[] args) {
+		ServiceLoader<Factorial> loader = ServiceLoader.load(Factorial.class);
+		System.out.println(loader.toString());
+		System.out.println(loader.iterator().hasNext());
+		
+		Factorial fac1 = loader.iterator().next();
+		Factorial fac2 = loader.iterator().next();
+		System.out.println("Fakultät1: "+fac1.factorial(5));
+		System.out.println("Fakultät2: "+fac2.factorial(5));
+	}	
+}

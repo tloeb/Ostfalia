@@ -1,0 +1,19 @@
+package de.proglabor.aufgabe3;
+
+import java.util.LinkedList;
+import java.util.TreeMap;
+
+public interface SimCollectionsInterface 
+{
+	//Ablauf eines Tages in der Simulation durchfuehren
+	public void day();
+	public void day(int randomDirection, int randomReproduceGene, int randomReproduceMutation);
+	public int getAnzahlTiere(int x, int y);
+	public int getAnzahlTiereAll();
+	public int getAnzahlPflanzen(int x, int y);
+	public int getAnzahlPflanzenAll();
+	public abstract LinkedList<TierInterface> getTiere();
+	public abstract TreeMap<Pflanze, Integer> getPflanzen();
+	public void setTier(Tier neuesTier);
+	public String toString();
+}

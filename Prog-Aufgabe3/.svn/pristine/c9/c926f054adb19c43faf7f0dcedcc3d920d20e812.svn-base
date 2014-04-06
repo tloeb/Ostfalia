@@ -1,0 +1,30 @@
+package de.proglabor.aufgabe3.gui;
+
+import java.awt.*;
+import java.awt.event.MouseMotionListener;
+
+import de.proglabor.aufgabe3.SimCollections;
+
+/**
+ * Controler
+ * Created by Tobias on 10.12.13.
+ */
+
+public class SimControler implements SimControlerInterface {
+
+    private SimCollections model;
+    private SimView view;
+
+
+    public SimControler (SimCollections model) {
+        this.model = model;
+        view = new SimView(model, this);
+        view.init(this.model);
+
+    }
+	
+
+	
+	
+
+}
